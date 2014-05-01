@@ -1,0 +1,62 @@
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'artifactory-publish'
+apply plugin: 'project-report'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+
+buildscript {
+	repositories {
+		maven {
+			url 'http://elgregos.com/artifactory/elgregos'
+			credentials {
+				username = "${artifactory_user}"
+				password = "${artifactory_password}"
+			}
+		}
+		ivy {
+			url 'http://elgregos.com/artifactory/elgregos'
+			credentials {
+				username = "${artifactory_user}"
+				password = "${artifactory_password}"
+			}
+		}
+	}
+
+	dependencies {
+		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3'	
+	}
+}
+
+artifactory {
+	contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+	publish {
+		repository {
+			repoKey = 'elgregos-release-local'
+			username = "${artifactory_user}"
+			password = "${artifactory_password}"
+			ivy {
+				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
+				mavenCompatible = true
+			}
+		}
+	}
+	resolve {
+		repository {
+			repoKey = 'elgregos'
+			username = "${artifactory_user}"
+			password = "${artifactory_password}"
+			ivy {
+				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
+				mavenCompatible = true
+			}
+		}
+	}
+}
+
+sourceCompatibility = '8'
+
