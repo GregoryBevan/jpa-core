@@ -1,0 +1,4 @@
+jpa-core
+========
+
+jpa-core
