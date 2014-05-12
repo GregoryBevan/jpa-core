@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.ironjacamar.org/schema/datasources_1_0.xsd">
+	<datasource jndi-name="java:jboss/datasources/arquillian" pool-name="PostgresDS">
+		<connection-url>jdbc:postgresql://192.168.10.127:5432/testdb</connection-url>
+		<driver-class>org.postgresql.Driver</driver-class>
+		<driver>test.war_org.postgresql.Driver_9_0</driver>
+		
+		<security>
+			<user-name>testuser</user-name>
+			<password>testuser</password>
+		</security>
+		<validation>
+			<valid-connection-checker
+				class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"></valid-connection-checker>
+			<exception-sorter
+				class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"></exception-sorter>
+		</validation>
+	</datasource>
+</datasources>
