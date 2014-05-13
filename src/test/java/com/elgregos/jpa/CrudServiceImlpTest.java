@@ -5,6 +5,7 @@ import java.io.File;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -31,7 +32,8 @@ public class CrudServiceImlpTest {
 	public static Archive<?> createDeploymentPackage() {
 		return new EarDeployment("crud.ear") {
 			{
-				this.webArchive.addAsWebInfResource("postgres-ds.xml");
+				// this.webArchive.addAsWebInfResource("postgres-ds.xml");
+				this.webArchive.addAsWebInfResource("test-ds.xml");
 				this.ejbModule.addClasses(PersonCrudService.class, ServiceBean.class).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 				this.earLibraries.add(ShrinkWrap.create(JavaArchive.class, "entity.jar").addPackage(Person.class.getPackage())
 						.addClasses(BaseEntity.class, CrudService.class, CrudServiceImlp.class)
@@ -41,24 +43,22 @@ public class CrudServiceImlpTest {
 	}
 
 	@Inject
-	ServiceBean serviceBean;
-
-	// @Inject
-	// PersonCrudService personCrudService;
+	PersonCrudService personCrudService;
 
 	@Test
+	@OperateOnDeployment("dep2")
 	public void testCrudServiceImlp() {
-		this.serviceBean.test();
-		Assert.assertNotNull(this.serviceBean);
-		// Assert.assertEquals(Person.class, this.personCrudService.getType());
+		Assert.assertEquals(Person.class, this.personCrudService.getType());
 	}
 
 	@Test
+	@OperateOnDeployment("dep2")
 	public void testCreate() {
-		// final Person person = new Person();
-		// new CrudServiceImlp<Person>() {
-		//
-		// }.create(person);
-		// Assert.assertEquals(1, person.getId().longValue());
+		final Person person = new Person();
+		final Person person2 = new Person();
+		personCrudService.create(person);
+		personCrudService.create(person2);
+		Assert.assertEquals(1, person.getId().longValue());
+		Assert.assertEquals(2, person.getId().longValue());
 	}
 }
