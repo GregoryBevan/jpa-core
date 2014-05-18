@@ -10,11 +10,10 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 		<class>com.elgregos.jpa.entity.Animal</class>
 		<class>com.elgregos.jpa.entity.Person</class>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 			<!-- property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" /-->
-			<property name="hibernate.default_schema" value="testschema" />
 		</properties>
 	</persistence-unit>
 </persistence>
