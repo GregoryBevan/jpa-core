@@ -70,7 +70,10 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.6'	
 	testCompile group:'elgregos', name:'test-framework', version:'1.0.0', changing: true
 	testRuntime 'org.wildfly:wildfly-arquillian-container-embedded:8.0.0.Final'
-	//testRuntime 'org.wildfly:wildfly-arquillian-container-managed:8.0.0.Final'
 	testRuntime 'postgresql:postgresql:9.1-901.jdbc4'
+}
+
+test {
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
 }
 

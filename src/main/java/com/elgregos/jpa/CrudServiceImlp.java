@@ -18,10 +18,11 @@ public abstract class CrudServiceImlp<T> implements CrudService<T> {
 
 	public Class<T> type;
 
+	@SuppressWarnings("unchecked")
 	public CrudServiceImlp() {
 		final Type t = getClass().getGenericSuperclass();
 		final ParameterizedType pt = (ParameterizedType) t;
-		this.type = (Class<T>) pt.getActualTypeArguments()[0];
+		this.type = (Class<T>)pt.getActualTypeArguments()[0];
 	}
 
 	@Override
