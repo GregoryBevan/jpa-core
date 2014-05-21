@@ -3,12 +3,12 @@ package com.elgregos.jpa;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public abstract class CrudServiceImlp<T> implements CrudService<T> {
@@ -22,7 +22,7 @@ public abstract class CrudServiceImlp<T> implements CrudService<T> {
 	public CrudServiceImlp() {
 		final Type t = getClass().getGenericSuperclass();
 		final ParameterizedType pt = (ParameterizedType) t;
-		this.type = (Class<T>)pt.getActualTypeArguments()[0];
+		this.type = (Class<T>) pt.getActualTypeArguments()[0];
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public abstract class CrudServiceImlp<T> implements CrudService<T> {
 	}
 
 	@Override
-	public List<T> findWithNamedQuery(final String namedQueryName, final Map<String, Object> parameters) {
-		return findWithNamedQuery(namedQueryName, parameters, 0);
+	public List<T> findWithNamedQuery(final String namedQueryName, final QueryParameters queryParameters) {
+		return findWithNamedQuery(namedQueryName, queryParameters, 0);
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public abstract class CrudServiceImlp<T> implements CrudService<T> {
 	}
 
 	@Override
-	public List<T> findWithNamedQuery(final String namedQueryName, final Map<String, Object> parameters, final int resultLimit) {
-		final Set<Entry<String, Object>> rawParameters = parameters.entrySet();
+	public List<T> findWithNamedQuery(final String namedQueryName, final QueryParameters queryParameters, final int resultLimit) {
+		final Set<Entry<String, Object>> rawParameters = queryParameters.getParameters().entrySet();
 		final TypedQuery<T> query = this.entityManager.createNamedQuery(namedQueryName, this.type);
 		if (resultLimit > 0) {
 			query.setMaxResults(resultLimit);
@@ -77,10 +77,21 @@ public abstract class CrudServiceImlp<T> implements CrudService<T> {
 		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<T> findByNativeQuery(final String sql) {
 		return this.entityManager.createNativeQuery(sql, this.type).getResultList();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<T> findByNativeQuery(final String sql, final QueryParameters queryParameters) {
+		final Set<Entry<String, Object>> rawParameters = queryParameters.getParameters().entrySet();
+		final Query query = this.entityManager.createNativeQuery(sql, this.type);
+		for (final Entry<String, Object> entry : rawParameters) {
+			query.setParameter(entry.getKey(), entry.getValue());
+		}
+		return query.getResultList();
 	}
 
 	@Override
