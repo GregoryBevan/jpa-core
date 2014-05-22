@@ -1,11 +1,13 @@
 apply plugin: 'eclipse'
 apply plugin: 'java'
-apply plugin: 'artifactory-publish'
+apply plugin: 'artifactory'
 apply plugin: 'project-report'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
+group='elgregos'
+version='1.0.0'
 
 buildscript {
 	repositories {
@@ -37,6 +39,7 @@ artifactory {
 			repoKey = 'elgregos-release-local'
 			username = "${artifactory_user}"
 			password = "${artifactory_password}"
+			maven = false
 			ivy {
 				ivyLayout = '[organization]/[module]/ivy-[revision].xml'
 				artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
@@ -70,10 +73,13 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.6'	
 	testCompile group:'elgregos', name:'test-framework', version:'1.0.0', changing: true
 	testRuntime 'org.wildfly:wildfly-arquillian-container-embedded:8.0.0.Final'
-	testRuntime 'postgresql:postgresql:9.1-901.jdbc4'
 }
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+
+artifactoryPublish {
+    publishConfigs ('archives')
 }
 
