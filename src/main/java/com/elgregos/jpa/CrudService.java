@@ -1,7 +1,6 @@
 package com.elgregos.jpa;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CrudService<T> {
 
@@ -17,11 +16,13 @@ public interface CrudService<T> {
 
 	List<T> findWithNamedQuery(final String queryName, final int resultLimit);
 
-	List<T> findWithNamedQuery(final String namedQueryName, final Map<String, Object> parameters);
+	List<T> findWithNamedQuery(final String namedQueryName, final QueryParameters queryParameters);
 
-	List<T> findWithNamedQuery(final String namedQueryName, final Map<String, Object> parameters, final int resultLimit);
+	List<T> findWithNamedQuery(final String namedQueryName, final QueryParameters queryParameters, final int resultLimit);
 
 	List<T> findByNativeQuery(final String sql);
+
+	List<T> findByNativeQuery(final String sql, final QueryParameters parameters);
 
 	Class<T> getType();
 }

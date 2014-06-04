@@ -14,38 +14,47 @@ public class PersonFacade {
 	PersonCrudService personCrudService;
 
 	public Class<Person> getPersonCrudServiceType() {
-		return personCrudService.getType();
+		return this.personCrudService.getType();
 	}
 
-	public void createPerson(Person person) {
-		personCrudService.create(person);
+	public void createPerson(final Person person) {
+		this.personCrudService.create(person);
 	}
 
 	public Person findPerson(final Long id) {
-		return personCrudService.find(id);
+		return this.personCrudService.find(id);
 	}
 
 	public void deletePerson(final Long id) {
-		personCrudService.delete(id);
+		this.personCrudService.delete(id);
 	}
 
 	public Person updatePerson(final Person person) {
-		return personCrudService.update(person);
+		return this.personCrudService.update(person);
 	}
 
 	public List<Person> findAll() {
-		return personCrudService.findAll();
+		return this.personCrudService.findAll();
 	}
 
-	public List<Person> findSome(int resultLimit) {
-		return personCrudService.findSome(resultLimit);
+	public List<Person> findSome(final int resultLimit) {
+		return this.personCrudService.findSome(resultLimit);
 	}
 
-	public List<Person> findByLastname(String lastname) {
-		return personCrudService.findByLastname(lastname);
+	public List<Person> findByLastname(final String lastname) {
+		return this.personCrudService.findByLastname(lastname);
 	}
 
-	public List<Person> findByLastname(String lastname, int resultLimit) {
-		return personCrudService.findByLastname(lastname, resultLimit);
+	public List<Person> findByLastname(final String lastname, final int resultLimit) {
+		return this.personCrudService.findByLastname(lastname, resultLimit);
+	}
+
+	public List<Person> findAllPersons() {
+		return this.personCrudService.findByNativeQuery("select * from person");
+	}
+
+	public Person findPerson(final String firstname, final String lastname) {
+		return this.personCrudService.findPerson(firstname, lastname);
+
 	}
 }
