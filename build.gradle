@@ -7,7 +7,7 @@ apply plugin: 'maven'
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
 }
-group='elgregos'
+group='com.elgregos'
 version='1.0.0'
 
 buildscript {
